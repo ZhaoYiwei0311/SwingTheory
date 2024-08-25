@@ -6,7 +6,9 @@ import { thunk } from "redux-thunk";
 import { QueryClient, QueryClientProvider } from "react-query";
 import rootReducer from "./src/redux/reducers";
 import Route from "./src/navigation/main";
-import { View, Text } from "react-native";
+import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -20,9 +22,23 @@ firebaseConfig = {
   measurementId: "G-DKPN99GQPM",
 };
 
+let app;
+let auth;
+let db;
+let storage;
+
 if (!getApps().length) {
-  initializeApp(firebaseConfig);
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApps()[0]; // if firebase is already initialized use that one
 }
+
+auth = getAuth(app);
+db = getFirestore(app);
+storage = getStorage(app);
+
+export { auth, db, storage };
+
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchInterval: false, staleTime: Infinity } },
 });
