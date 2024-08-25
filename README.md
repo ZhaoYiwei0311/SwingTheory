@@ -19,7 +19,7 @@ tennis-analysising
 
 5. Click the bottom icon of "Add"
    
-6. Allow all permissions (I'm not sure whether it works. If not, manually all microphone, camera, gallery access)
+6. Allow all permissions (I'm not sure whether it works. If not, manually allow all access for microphone, camera, gallery access)
    
 7. You could either shoot the video(manually stop or wait for 10 seconds automatically stop) to upload or select videos in gallery.
     (Attention: The shooting video will automatically saved in firebase. Please do not testing this function frequently.)
