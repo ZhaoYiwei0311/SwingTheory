@@ -1,0 +1,86 @@
+import { StyleSheet } from "react-native";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  message: {
+    textAlign: "center",
+    paddingBottom: 10,
+  },
+  camera: {
+    flex: 1,
+    backgroundColor: "black",
+  },
+  flipButtonContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    margin: 48,
+  },
+  flipButton: {
+    alignSelf: "flex-end",
+  },
+  flipText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+  },
+  container: {
+    flex: 1,
+    marginTop: 30,
+  },
+
+  bottomBarContainer: {
+    alignItems: "center",
+    position: "absolute",
+    bottom: 0,
+    flexDirection: "row",
+    marginBottom: 30,
+  },
+  recordButtonContainer: {
+    flex: 1,
+    marginHorizontal: 30,
+  },
+  recordButton: {
+    borderWidth: 8,
+    borderColor: "#ff404087",
+    backgroundColor: "#ff4040",
+    borderRadius: 100,
+    height: 80,
+    width: 80,
+    alignSelf: "center",
+  },
+  galleryButton: {
+    borderWidth: 2,
+    borderColor: "white",
+    borderRadius: 10,
+    overflow: "hidden",
+    width: 50,
+    height: 50,
+  },
+  galleryButtonImage: {
+    width: 50,
+    height: 50,
+  },
+  sideBarContainer: {
+    top: 60,
+    right: 0,
+    marginHorizontal: 20,
+    position: "absolute",
+  },
+  iconText: {
+    color: "white",
+    fontSize: 12,
+    marginTop: 5,
+  },
+  sideBarButton: {
+    alignItems: "center",
+    marginBottom: 25,
+  },
+});
+
+export default styles;
