@@ -1,11 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Feather from "react-native-vector-icons/Feather";
 import { View, Text, Button, TouchableOpacity, Image } from "react-native";
 import {
-  Camera,
   CameraView,
-  FlashMode,
-  CameraType,
   useCameraPermissions,
   useMicrophonePermissions,
 } from "expo-camera";
@@ -13,10 +10,11 @@ import styles from "./styles";
 import { useDispatch } from "react-redux";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import * as MediaLibrary from "expo-media-library"; // 导入MediaLibrary
-import * as ImageManipulator from "expo-image-manipulator";
+import * as MediaLibrary from "expo-media-library";
 import Analysising from "../analysising";
 import { createPost } from "../../redux/actions";
+import CircularProgress from "react-native-circular-progress-indicator";
+import CountdownBar from "react-native-countdown-bar";
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState("back");
@@ -25,7 +23,7 @@ export default function CameraScreen() {
   const [imagePermission, requestImagePermission] =
     ImagePicker.useCameraPermissions();
   const [mediaLibraryPermission, requestMediaLibraryPermission] =
-    MediaLibrary.usePermissions(); // 新增：请求媒体库权限
+    MediaLibrary.usePermissions();
   const isFocused = useIsFocused();
   const cameraRef = useRef(null);
   const [isCameraReady, setIsCameraReady] = useState(false);
@@ -33,13 +31,12 @@ export default function CameraScreen() {
   const [requestRunning, setRequestRunning] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [showProgress, setShowProgress] = useState(false);
 
-  // 不渲染任何内容直到权限请求完毕
   if (!cameraPermission || !audioPermission || !mediaLibraryPermission) {
     return <View />;
   }
 
-  // 如果权限未被授予，则显示一条消息
   if (
     !cameraPermission.granted ||
     !audioPermission.granted ||
@@ -83,51 +80,61 @@ export default function CameraScreen() {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
-  const toggleRecording = async () => {
+  const startRecording = async () => {
     if (!cameraRef.current) return;
 
-    if (isRecording) {
-      // Stop recording
-      try {
-        await cameraRef.current.stopRecording();
-        console.log("Video recording stopped");
-      } catch (error) {
-        console.error("Error stopping video recording:", error.message);
-      } finally {
-        setIsRecording(false);
-      }
-    } else {
-      // Start recording
-      try {
-        setIsRecording(true);
-        console.log("Recording video");
-        const videoPromise = await cameraRef.current.recordAsync({
-          maxDuration: 10,
-          codec: "avc1",
+    console.log("3 seconds passed. Start recording video.");
+
+    setIsRecording(true);
+
+    const videoPromise = await cameraRef.current.recordAsync({
+      maxDuration: 11,
+      codec: "avc1",
+    });
+
+    if (videoPromise) {
+      await saveVideoToLibrary(videoPromise.uri);
+      const description = "Uploaded from camera recording";
+      console.log("Video recorded", videoPromise.uri);
+      setRequestRunning(true);
+      await dispatch(createPost(description, videoPromise.uri))
+        .then(() => {
+          console.log(
+            "createPost dispatched successfully. Navigating to top..."
+          );
+        })
+        .catch((error) => {
+          console.log("Dispatching createPost failed:", error);
+        })
+        .finally(() => {
+          setIsRecording(false);
+          setRequestRunning(false);
         });
-        if (videoPromise) {
-          await saveVideoToLibrary(videoPromise.uri);
-          const description = "Uploaded from camera recording";
-          console.log("Video recorded", videoPromise.uri);
-          setRequestRunning(true);
-          await dispatch(createPost(description, videoPromise.uri))
-            .then(() => {
-              console.log(
-                "createPost dispatched successfully. Navigating to top..."
-              );
-            })
-            .catch((error) => {
-              console.log("Dispatching createPost failed:", error);
-            })
-            .finally(() => {
-              setRequestRunning(false);
-            });
-        }
-      } catch (error) {
-        console.warn("Failed to upload video");
-        setIsRecording(false);
-        setRequestRunning(false);
-      }
+    }
+  };
+
+  const stopRecording = async () => {
+    if (!cameraRef.current) return;
+    try {
+      await cameraRef.current.stopRecording();
+      console.log("Video recording stopped");
+    } catch (error) {
+      console.error("Error stopping video recording:", error.message);
+    } finally {
+      setIsRecording(false);
+    }
+  };
+
+  const toggleRecording = async () => {
+    if (isRecording) {
+      await stopRecording();
+    } else {
+      setShowProgress(true);
+      console.log("Waiting for 3 seconds...");
+      // Delay the recording for 3 seconds
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      setShowProgress(false);
+      await startRecording();
     }
   };
 
@@ -166,6 +173,32 @@ export default function CameraScreen() {
               <Text style={styles.iconText}>Flip</Text>
             </TouchableOpacity>
           </View>
+
+          {isRecording && (
+            <View style={styles.countdownBarContainer}>
+              <CountdownBar
+                time={10}
+                height="3"
+                BgColor="#8B000090" // Dark red color
+                BgColorIn="rgba(0, 0, 0, 0)"
+              />
+            </View>
+          )}
+
+          {showProgress ? (
+            <View style={styles.counterCircularProgress}>
+              <CircularProgress
+                value={0}
+                radius={80}
+                maxValue={3}
+                initialValue={3}
+                progressValueColor={"#fff"}
+                activeStrokeWidth={15}
+                inActiveStrokeWidth={15}
+                duration={3000}
+              />
+            </View>
+          ) : null}
         </CameraView>
       ) : null}
 
@@ -173,11 +206,12 @@ export default function CameraScreen() {
         <View style={{ flex: 1 }}></View>
         <View style={styles.recordButtonContainer}>
           <TouchableOpacity
-            disabled={!isCameraReady}
-            onPress={toggleRecording} // 使用单击切换录制
+            disabled={!isCameraReady || showProgress}
+            onPress={toggleRecording}
             style={[
               styles.recordButton,
-              isRecording && styles.recordButtonActive, // 动态样式更改
+              isRecording,
+              (!isCameraReady || showProgress) && styles.recordButtonDisabled,
             ]}
           />
         </View>

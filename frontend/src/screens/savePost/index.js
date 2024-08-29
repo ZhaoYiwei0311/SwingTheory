@@ -1,7 +1,6 @@
 import { StackActions, useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import {
-  ActivityIndicator,
   Image,
   Text,
   TextInput,
