@@ -3,9 +3,6 @@ import { View, Text } from "react-native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import CameraScreen from "../../screens/camera";
-import firebase from "firebase/app";
-import FeedScreen from "../../screens/feed";
-import FeedNavigation from "../feed";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -17,11 +14,11 @@ export default function HomeScreen() {
   return (
     <Tab.Navigator
       barStyle={{ backgroundColor: "black" }}
-      initialRouteName="feed"
+      initialRouteName="home"
     >
       <Tab.Screen
         name="feed"
-        component={FeedNavigation}
+        component={EmptyScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="home" size={24} color={color} />
@@ -35,6 +32,16 @@ export default function HomeScreen() {
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="plus-square" size={24} color={color} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Me"
+        component={EmptyScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Feather name="user" size={24} color={color} />
           ),
         }}
       />
