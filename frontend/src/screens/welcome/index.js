@@ -4,7 +4,6 @@ import ScreenWrapper from "../../components/screenWrapper/screenWrapper";
 import { StatusBar } from "expo-status-bar";
 import { wp } from "../../constants/common";
 import { theme } from "../../constants/theme";
-// import { useRouter } from "expo-router";
 import Button from "../../components/button";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
@@ -39,7 +38,7 @@ function WelcomeScreen() {
           />
           <View style={styles.bottomTextContainer}>
             <Text style={styles.loginText}>Already have an account!</Text>
-            <Pressable onPress={() => {}}>
+            <Pressable onPress={() => navigation.navigate("login")}>
               <Text
                 style={[
                   styles.loginText,

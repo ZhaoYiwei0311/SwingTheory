@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     flexDirection: "row",
-    marginBottom: 30,
+    marginBottom: 60,
   },
   recordButtonContainer: {
     flex: 1.5,
@@ -31,36 +31,31 @@ const styles = StyleSheet.create({
     width: 75,
     alignSelf: "center",
     borderWidth: 10,
-    borderColor: "#8B000040",
+    borderColor: "#80000040",
   },
   recordButtonDisabled: {
-    backgroundColor: "#800000",
-  },
-  galleryButton: {
-    borderRadius: 10,
-    overflow: "hidden",
-    width: 70,
-    height: 70,
-  },
-  galleryButtonImage: {
-    width: 65,
-    height: 65,
+    backgroundColor: "#80000040",
   },
   sideBarContainer: {
-    top: 60,
+    top: 50,
     right: 0,
     marginHorizontal: 30,
     marginVertical: 20,
     position: "absolute",
   },
-  iconText: {
-    color: "white",
-    fontSize: 20,
-    marginTop: 5,
-  },
   sideBarButton: {
     alignItems: "center",
     marginBottom: 20,
+  },
+  backButtonContainer: {
+    position: "absolute",
+    top: 50,
+    left: 0,
+  },
+  backButton: {
+    alignSelf: "flex-start",
+    marginVertical: 10,
+    marginHorizontal: 20,
   },
   counterCircularProgress: {
     position: "absolute",
@@ -73,9 +68,9 @@ const styles = StyleSheet.create({
   },
   countdownBarContainer: {
     position: "absolute",
-    bottom: 0,
+    bottom: 2,
     width: "100%",
-    height: 6,
+    height: 8,
   },
 });
 

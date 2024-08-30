@@ -1,6 +1,13 @@
 import React, { useRef, useState } from "react";
 import Feather from "react-native-vector-icons/Feather";
-import { View, Text, Button, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  TouchableOpacity,
+  Image,
+  Pressable,
+} from "react-native";
 import {
   CameraView,
   useCameraPermissions,
@@ -15,6 +22,7 @@ import Analysising from "../analysising";
 import { createPost } from "../../redux/actions";
 import CircularProgress from "react-native-circular-progress-indicator";
 import CountdownBar from "react-native-countdown-bar";
+import { GalleryIcon, ArrowLeftIcon } from "../../components/icons/icons";
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState("back");
@@ -164,13 +172,25 @@ export default function CameraScreen() {
           onCameraReady={() => setIsCameraReady(true)}
           mode={"video"}
         >
+          <View style={styles.backButtonContainer}>
+            <Pressable
+              onPress={() => navigation.navigate("home")}
+              style={styles.backButton}
+            >
+              <ArrowLeftIcon
+                strokeWidth={2.0}
+                color="white"
+                width={50}
+                height={50}
+              />
+            </Pressable>
+          </View>
           <View style={styles.sideBarContainer}>
             <TouchableOpacity
               style={styles.sideBarButton}
               onPress={toggleCameraFacing}
             >
               <Feather name="refresh-ccw" size={32} color="white" />
-              <Text style={styles.iconText}>Flip</Text>
             </TouchableOpacity>
           </View>
 
@@ -179,7 +199,7 @@ export default function CameraScreen() {
               <CountdownBar
                 time={10}
                 height="3"
-                BgColor="#8B000090"
+                BgColor="rgba(139,0,0,0.8)"
                 BgColorIn="rgba(0, 0, 0, 0)"
               />
             </View>
@@ -218,10 +238,7 @@ export default function CameraScreen() {
 
         <View style={{ flex: 1 }}>
           <TouchableOpacity style={styles.galleryButton} onPress={pickVideo}>
-            <Image
-              style={styles.galleryButtonImage}
-              source={require("../../images/album_logo.png")}
-            />
+            <GalleryIcon />
           </TouchableOpacity>
         </View>
       </View>

@@ -37,7 +37,6 @@
         }
       }
     },
-
     "plugins": [
       [
         "expo-camera",
@@ -60,7 +59,8 @@
           "savePhotosPermission": "Allow 111 to save photos.",
           "isAccessMediaLocationEnabled": true
         }
-      ]
+      ],
+      "expo-router"
     ]
   }
 }

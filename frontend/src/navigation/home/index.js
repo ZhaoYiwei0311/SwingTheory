@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { Feather } from "@expo/vector-icons";
 import CameraScreen from "../../screens/camera";
-import WelcomeScreen from "../../screens/welcome";
+import { HomeIcon, AddIcon, UserIcon } from "../../components/icons/icons";
+import { theme } from "../../constants/theme";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -14,26 +14,35 @@ const EmptyScreen = () => {
 export default function HomeScreen() {
   return (
     <Tab.Navigator
-      barStyle={{ backgroundColor: "black" }}
-      initialRouteName="home"
+      activeColor={theme.colors.primaryDark2}
+      inactiveColor="white"
+      barStyle={{
+        backgroundColor: theme.colors.primary,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        overflow: "hidden",
+      }}
+      initialRouteName="Home"
     >
       <Tab.Screen
-        name="feed"
+        name="home"
         component={EmptyScreen}
         options={{
-          tabBarIcon: ({ color }) => (
-            <Feather name="home" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <HomeIcon color={color} />,
         }}
       />
 
       <Tab.Screen
         name="Add"
-        component={CameraScreen}
+        component={EmptyScreen}
+        listeners={({ navigation }) => ({
+          tabPress: (event) => {
+            event.preventDefault();
+            navigation.navigate("camera");
+          },
+        })}
         options={{
-          tabBarIcon: ({ color }) => (
-            <Feather name="plus-square" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <AddIcon color={color} />,
         }}
       />
 
@@ -41,9 +50,7 @@ export default function HomeScreen() {
         name="Me"
         component={EmptyScreen}
         options={{
-          tabBarIcon: ({ color }) => (
-            <Feather name="user" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <UserIcon color={color} />,
         }}
       />
     </Tab.Navigator>
