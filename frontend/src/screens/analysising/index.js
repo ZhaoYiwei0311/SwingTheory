@@ -1,6 +1,6 @@
 import React from "react";
 import { View, ActivityIndicator, Text } from "react-native";
-import styles from "./styles"; // assuming you have a styles.js file in the same directory
+import styles from "./styles";
 
 const Analysising = () => (
   <View style={styles.uploadingContainer}>
