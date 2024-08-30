@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import Feather from "react-native-vector-icons/Feather";
 import { View, Text, Button, TouchableOpacity, Image } from "react-native";
 import {
@@ -179,7 +179,7 @@ export default function CameraScreen() {
               <CountdownBar
                 time={10}
                 height="3"
-                BgColor="#8B000090" // Dark red color
+                BgColor="#8B000090"
                 BgColorIn="rgba(0, 0, 0, 0)"
               />
             </View>
@@ -220,7 +220,7 @@ export default function CameraScreen() {
           <TouchableOpacity style={styles.galleryButton} onPress={pickVideo}>
             <Image
               style={styles.galleryButtonImage}
-              source={require("../../image/album_logo.png")}
+              source={require("../../images/album_logo.png")}
             />
           </TouchableOpacity>
         </View>

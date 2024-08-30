@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import CameraScreen from "../../screens/camera";
+import WelcomeScreen from "../../screens/welcome";
 
 const Tab = createMaterialBottomTabNavigator();
 
