@@ -34,7 +34,7 @@ function WelcomeScreen() {
           <Button
             title="Getting Started"
             buttonStyle={{ marginHorizontal: wp(3) }}
-            onPress={() => navigation.navigate("home")}
+            onPress={() => navigation.navigate("signUp")}
           />
           <View style={styles.bottomTextContainer}>
             <Text style={styles.loginText}>Already have an account!</Text>

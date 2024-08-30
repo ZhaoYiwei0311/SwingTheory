@@ -6,6 +6,7 @@ import LoginScreen from "../../screens/login";
 import CameraScreen from "../../screens/camera";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import SignUpScreen from "../../screens/signUp";
 const Stack = createStackNavigator();
 
 export default function Route() {
@@ -35,6 +36,11 @@ export default function Route() {
         <Stack.Screen
           name="camera"
           component={CameraScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="signUp"
+          component={SignUpScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
