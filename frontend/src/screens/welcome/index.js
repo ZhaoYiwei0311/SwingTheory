@@ -38,7 +38,7 @@ function WelcomeScreen() {
           />
           <View style={styles.bottomTextContainer}>
             <Text style={styles.loginText}>Already have an account!</Text>
-            <Pressable onPress={() => navigation.navigate("login")}>
+            <Pressable onPress={() => navigation.navigate("home")}>
               <Text
                 style={[
                   styles.loginText,

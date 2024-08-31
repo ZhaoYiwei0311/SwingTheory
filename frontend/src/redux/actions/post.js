@@ -1,10 +1,7 @@
-import firebase from "firebase/app";
 // import { storage } from "../../../App";
 // import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import uuid from "uuid-random";
-
 const importStorageFunctions = async () => {
-  // Dynamically import the required modules or else build error
   const appModule = await import("../../../App");
   const storageModule = await import("firebase/storage");
   storage = appModule.storage;
@@ -15,14 +12,12 @@ const importStorageFunctions = async () => {
 
 // Call the function to import the required modules
 importStorageFunctions();
-
 let storageRef;
 
 //Same reason as above, need to dynamically import the required modules
 const initializeStorage = async () => {
   await importStorageFunctions();
 };
-
 initializeStorage();
 
 export const createPost = (description, video) => (dispatch) =>

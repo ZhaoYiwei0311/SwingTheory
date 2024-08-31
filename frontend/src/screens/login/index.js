@@ -9,18 +9,29 @@ import {
 } from "../../components/icons/icons";
 import { hp } from "../../constants/common";
 import { theme } from "../../constants/theme";
-
 import Button from "../../components/button";
-
 import Input from "../../components/input";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/actions/auth";
 
 const LoginScreen = () => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handleLogin = (email, password) => {
+    dispatch(login(email, password))
+      .then(() => {
+        console.log("Login successful");
+      })
+      .catch(() => {
+        console.log("Login unsuccessful");
+      });
+  };
 
   const onSubmit = async () => {
     if (!emailRef.current || !passwordRef.current) {
@@ -32,10 +43,9 @@ const LoginScreen = () => {
     let password = passwordRef.current.trim();
 
     setLoading(true);
-    // const { error } = await supabase.auth.signInWithPassword({
-    //   email: email,
-    //   password: password,
-    // });
+    console.log("email", email);
+
+    const error = await handleLogin(email, password);
 
     if (error) Alert.alert("Login", error.message);
     setLoading(false);
@@ -88,7 +98,7 @@ const LoginScreen = () => {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>Dont't have an account?</Text>
-          <Pressable onPress={() => {}}>
+          <Pressable onPress={() => navigation.navigate("signUp")}>
             <Text
               style={[
                 styles.footerText,

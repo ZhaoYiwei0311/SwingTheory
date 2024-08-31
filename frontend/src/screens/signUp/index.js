@@ -16,6 +16,7 @@ import Button from "../../components/button";
 import Input from "../../components/input";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { register } from "../../redux/actions";
 
 const SignUpScreen = () => {
   const emailRef = useRef("");
@@ -23,6 +24,17 @@ const SignUpScreen = () => {
   const passwordRef = useRef("");
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+
+  const handleSignUp = () => {
+    console.log("handleSignUp");
+    dispatch(register(email, password))
+      .then(() => {
+        console.log("register successful");
+      })
+      .catch(() => {
+        console.log("register unsuccessful");
+      });
+  };
 
   const onSubmit = async () => {
     if (!nameRef.current || !emailRef.current || !passwordRef.current) {
@@ -35,21 +47,12 @@ const SignUpScreen = () => {
     let password = passwordRef.current.trim();
 
     setLoading(true);
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        data: {
-          name,
-        },
-      },
-    });
+    console.log("email", email);
 
-    // console.log('session: ', session);
-    // console.log('error: ', error);
+    const error = await handleSignUp(email, password);
+
+    console.log("session: ", session);
+    console.log("error: ", error);
 
     if (error) Alert.alert("Sign up", error.message);
     setLoading(false);
