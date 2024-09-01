@@ -23,13 +23,15 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const handleLogin = (email, password) => {
-    dispatch(login(email, password))
+  const handleLogin = async (email, password) => {
+    return dispatch(login(email, password))
       .then(() => {
         console.log("Login successful");
+        return null;
       })
-      .catch(() => {
+      .catch((error) => {
         console.log("Login unsuccessful");
+        return error;
       });
   };
 
@@ -43,14 +45,16 @@ const LoginScreen = () => {
     let password = passwordRef.current.trim();
 
     setLoading(true);
-    console.log("email", email);
-
     const error = await handleLogin(email, password);
 
-    if (error) Alert.alert("Login", error.message);
     setLoading(false);
-
-    // setLoading(true);
+    if (error) {
+      // Will only alert the user when there is error
+      Alert.alert("Login", error.message);
+    } else {
+      // Will navigate to home only when login is successful
+      navigation.navigate("home");
+    }
   };
 
   return (

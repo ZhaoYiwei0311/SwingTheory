@@ -1,20 +1,24 @@
-// import { USER_STATE_CHANGE } from "../constants";
-// import { getPostsByUser } from "./post";
+import { USER_STATE_CHANGE } from "../constants";
+import { doc, onSnapshot } from "firebase/firestore";
 
 let getAuth,
   auth,
-  app,
+  firestore,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword;
+  signInWithEmailAndPassword,
+  onAuthStateChanged;
 
 const importAuthFunctions = async () => {
   const appModule = await import("../../../App");
   const authModule = await import("firebase/auth");
+  const firestoreModule = await import("firebase/firestore");
+  firestore = firestoreModule.getFirestore();
   app = appModule.default;
   getAuth = authModule.getAuth;
+  onAuthStateChanged = authModule.onAuthStateChanged;
   createUserWithEmailAndPassword = authModule.createUserWithEmailAndPassword;
   signInWithEmailAndPassword = authModule.signInWithEmailAndPassword;
-  auth = getAuth(app);
+  auth = getAuth();
 };
 
 const initializeAuth = async () => {
@@ -24,67 +28,60 @@ const initializeAuth = async () => {
 initializeAuth();
 
 export const login = (email, password) => (dispatch) => {
-  console.log("login function started.", email, password);
-  new Promise((resolve, reject) => {
-    console.log("login function started2.");
-    console.log("auth", auth);
-    auth()
-      .signInWithEmailAndPassword(email, password)
+  return new Promise((resolve, reject) => {
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user);
         resolve();
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        reject();
+        reject(error);
       });
   });
 };
 
 export const register = (email, password) => (dispatch) => {
-  console.log("register function started.");
-  new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user);
         resolve();
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        reject();
+        reject(error);
       });
   });
 };
 
-// export const userAuthStateListener = () => (dispatch) => {
-//   firebase.auth().onAuthStateChanged((user) => {
-//     if (user) {
-//       dispatch(getCurrentUserData());
-//       dispatch(getPostsByUser(firebase.auth().currentUser.uid));
-//     } else {
-//       dispatch({ type: USER_STATE_CHANGE, currentUser: null, loaded: true });
-//     }
-//   });
-// };
+export const userAuthStateListener = () => async (dispatch) => {
+  if (!auth) {
+    await importAuthFunctions();
+  }
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      dispatch(getCurrentUserData());
+    } else {
+      dispatch({ type: USER_STATE_CHANGE, currentUser: null, loaded: true });
+    }
+  });
+};
 
-// export const getCurrentUserData = () => (dispatch) => {
-//   firebase
-//     .firestore()
-//     .collection("user")
-//     .doc(firebase.auth().currentUser.uid)
-//     .onSnapshot((res) => {
-//       if (res.exists) {
-//         return dispatch({
-//           type: USER_STATE_CHANGE,
-//           currentUser: res.data(),
-//           loaded: true,
-//         });
-//       }
-//     });
-// };
+export const getCurrentUserData = () => (dispatch) => {
+  const uid = auth.currentUser.uid;
+  const userDocRef = doc(firestore, "user", uid);
+  onSnapshot(userDocRef, (snapshot) => {
+    if (snapshot.exists()) {
+      dispatch({
+        type: USER_STATE_CHANGE,
+        currentUser: snapshot.data(),
+        loaded: true,
+      });
+    } else {
+      dispatch({
+        type: USER_STATE_CHANGE,
+        currentUser: null,
+        loaded: true,
+      });
+    }
+  });
+};
