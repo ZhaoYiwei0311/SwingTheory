@@ -15,6 +15,7 @@ import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/auth";
+import { userAuthStateListener } from "../../redux/actions/auth";
 
 const LoginScreen = () => {
   const emailRef = useRef("");
@@ -49,10 +50,9 @@ const LoginScreen = () => {
 
     setLoading(false);
     if (error) {
-      // Will only alert the user when there is error
       Alert.alert("Login", error.message);
     } else {
-      // Will navigate to home only when login is successful
+      await new Promise((resolve) => setTimeout(resolve, 500));
       navigation.navigate("home");
     }
   };
@@ -82,6 +82,7 @@ const LoginScreen = () => {
             Please login to continue
           </Text>
           <Input
+            autoCapitalize="none"
             icon={<MailIcon size={26} strokeWidth={1.6} />}
             placeholder="Enter your email"
             placeholderTextColor={theme.colors.textLight}

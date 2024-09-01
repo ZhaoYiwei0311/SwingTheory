@@ -1,9 +1,7 @@
 import { USER_STATE_CHANGE } from "../constants";
-import { doc, onSnapshot } from "firebase/firestore";
 
 let getAuth,
   auth,
-  firestore,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged;
@@ -11,8 +9,6 @@ let getAuth,
 const importAuthFunctions = async () => {
   const appModule = await import("../../../App");
   const authModule = await import("firebase/auth");
-  const firestoreModule = await import("firebase/firestore");
-  firestore = firestoreModule.getFirestore();
   app = appModule.default;
   getAuth = authModule.getAuth;
   onAuthStateChanged = authModule.onAuthStateChanged;
@@ -21,8 +17,19 @@ const importAuthFunctions = async () => {
   auth = getAuth();
 };
 
+let getFirestore, firestore, doc, onSnapshot;
+
+const importFirestore = async () => {
+  const firestoreModule = await import("firebase/firestore");
+  getFirestore = firestoreModule.getFirestore;
+  doc = firestoreModule.doc;
+  onSnapshot = firestoreModule.onSnapshot;
+  firestore = getFirestore();
+};
+
 const initializeAuth = async () => {
   await importAuthFunctions();
+  await importFirestore();
 };
 
 initializeAuth();
@@ -66,9 +73,13 @@ export const userAuthStateListener = () => async (dispatch) => {
   });
 };
 
-export const getCurrentUserData = () => (dispatch) => {
+export const getCurrentUserData = () => async (dispatch) => {
+  if (!firestore) {
+    await importFirestore();
+  }
   const uid = auth.currentUser.uid;
   const userDocRef = doc(firestore, "user", uid);
+
   onSnapshot(userDocRef, (snapshot) => {
     if (snapshot.exists()) {
       dispatch({

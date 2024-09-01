@@ -78,6 +78,7 @@ const SignUpScreen = () => {
           </Text>
 
           <Input
+            autoCapitalize="none"
             icon={<MailIcon size={26} strokeWidth={1.6} />}
             placeholder="Enter your email"
             placeholderTextColor={theme.colors.textLight}
