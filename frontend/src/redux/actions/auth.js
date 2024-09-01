@@ -27,12 +27,12 @@ const importFirestore = async () => {
   firestore = getFirestore();
 };
 
-const initializeAuth = async () => {
+const initializeFirebase = async () => {
   await importAuthFunctions();
   await importFirestore();
 };
 
-initializeAuth();
+initializeFirebase();
 
 export const login = (email, password) => (dispatch) => {
   return new Promise((resolve, reject) => {
