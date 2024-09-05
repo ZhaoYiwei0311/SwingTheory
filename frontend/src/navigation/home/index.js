@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { HomeIcon, AddIcon, UserIcon } from "../../components/icons/icons";
 import { theme } from "../../constants/theme";
+import HomepageScreen from "../../screens/home";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -25,7 +26,7 @@ export default function HomeScreen() {
     >
       <Tab.Screen
         name="home"
-        component={EmptyScreen}
+        component={HomepageScreen}
         options={{
           tabBarIcon: ({ color }) => <HomeIcon color={color} />,
         }}
