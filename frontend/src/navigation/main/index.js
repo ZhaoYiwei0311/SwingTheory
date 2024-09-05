@@ -11,6 +11,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SignUpScreen from "../../screens/signUp";
 import { useEffect } from "react";
 import { userAuthStateListener } from "../../redux/actions/auth";
+import TestScreen from "../../screens/test";
 
 const Stack = createStackNavigator();
 
@@ -73,6 +74,11 @@ export default function Route() {
             <Stack.Screen
               name="signUp"
               component={SignUpScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="test"
+              component={TestScreen}
               options={{ headerShown: false }}
             />
           </>

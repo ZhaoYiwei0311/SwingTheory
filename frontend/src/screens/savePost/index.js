@@ -23,7 +23,7 @@ export default function SavePostScreen(props) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    generateThumbnail(); // Generate the thumbnail each time the screen is loaded
+    generateThumbnail();
   }, []);
 
   const generateThumbnail = async () => {
