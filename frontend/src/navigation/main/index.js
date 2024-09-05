@@ -12,6 +12,7 @@ import SignUpScreen from "../../screens/signUp";
 import { useEffect } from "react";
 import { userAuthStateListener } from "../../redux/actions/auth";
 import TestScreen from "../../screens/test";
+import { MailIcon } from "../../components/icons/icons";
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,11 @@ export default function Route() {
             <Stack.Screen
               name="home"
               component={HomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="main"
+              component={MailIcon}
               options={{ headerShown: false }}
             />
             <Stack.Screen

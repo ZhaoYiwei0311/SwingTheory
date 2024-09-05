@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { HomeIcon, AddIcon, UserIcon } from "../../components/icons/icons";
 import { theme } from "../../constants/theme";
+import HomeScreen from "../../screens/home";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -10,7 +11,7 @@ const EmptyScreen = () => {
   return <View></View>;
 };
 
-export default function HomeScreen() {
+export default function MainScreen() {
   return (
     <Tab.Navigator
       activeColor={theme.colors.primaryDark2}
@@ -21,11 +22,11 @@ export default function HomeScreen() {
         borderTopRightRadius: 20,
         overflow: "hidden",
       }}
-      initialRouteName="Home"
+      initialRouteName="main"
     >
       <Tab.Screen
         name="home"
-        component={EmptyScreen}
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ color }) => <HomeIcon color={color} />,
         }}
