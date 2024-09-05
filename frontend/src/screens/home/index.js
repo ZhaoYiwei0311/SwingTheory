@@ -21,7 +21,7 @@ export default function HomeScreen() {
   const data = [
     {
       name: "Forehand",
-      status: 1,
+      status: 24,
       image: forehand,
       lightColor: "#f8e4d9",
       color: "#F2E8CF",
@@ -29,7 +29,7 @@ export default function HomeScreen() {
     },
     {
       name: "Backhand",
-      status: 1,
+      status: 50,
       image: backhand,
       lightColor: "#d7f0f7",
       color: "#D4E7B5",
@@ -37,7 +37,8 @@ export default function HomeScreen() {
     },
     {
       name: "Serve",
-      status: 1,
+      status: 90,
+
       image: serve,
       lightColor: "#dad5fe",
       color: "#e8f7fc",
@@ -92,9 +93,9 @@ export default function HomeScreen() {
         <View style={{ alignSelf: "center", margin: 10 }}>
           <Progress.Circle
             size={50}
-            progress={data.status / 100}
             showsText={true}
-            formatText={(progress) => `${Math.round(progress * 100)}%`}
+            progress={data.status / 100}
+            formatText={() => data.status + "%"}
             unfilledColor="#ededed"
             borderColor="#ededed"
             color={data.darkColor}
@@ -106,7 +107,7 @@ export default function HomeScreen() {
               overflow: "hidden",
             }}
             textStyle={{
-              fontSize: 18,
+              fontSize: 14,
               fontFamily: "Poppins-Bold",
               fontWeight: "bold",
             }}
