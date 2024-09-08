@@ -3,6 +3,7 @@ import { View, Text, Image, ImageBackground, ScrollView } from "react-native";
 import * as Progress from "react-native-progress";
 import styles from "./styles";
 import ScreenWrapper from "../../components/screenWrapper/screenWrapper";
+import { theme } from "../../constants/theme";
 
 export default function HomeScreen() {
   const banner = require("../../images/bg.jpeg");
@@ -23,26 +24,26 @@ export default function HomeScreen() {
       name: "Forehand",
       status: 24,
       image: forehand,
-      lightColor: "#f8e4d9",
-      color: "#F2E8CF",
-      darkColor: "#fac5a4",
+      lightColor: theme.colors.lightyellow,
+      color: theme.colors.yellow,
+      darkColor: theme.colors.darkyellow,
     },
     {
       name: "Backhand",
       status: 50,
       image: backhand,
-      lightColor: "#d7f0f7",
-      color: "#D4E7B5",
-      darkColor: "#aceafc",
+      lightColor: theme.colors.lightblue,
+      color: theme.colors.lightgreen,
+      darkColor: theme.colors.darkblue,
     },
     {
       name: "Serve",
       status: 90,
 
       image: serve,
-      lightColor: "#dad5fe",
-      color: "#e8f7fc",
-      darkColor: "#8860a2",
+      lightColor: theme.colors.lightpurple,
+      color: theme.colors.purple,
+      darkColor: theme.colors.darkpurple,
     },
   ];
 
@@ -89,7 +90,7 @@ export default function HomeScreen() {
           elevation: 2,
         }}
       >
-        <Image source={data.image} style={{ height: 25, width: 25 }} />
+        <Image source={data.image} style={styles.dataimage} />
         <View style={{ alignSelf: "center", margin: 10 }}>
           <Progress.Circle
             size={50}
@@ -102,19 +103,12 @@ export default function HomeScreen() {
             direction="counter-clockwise"
             strokeCap="round"
             thickness={5}
-            style={{
-              elevation: 2,
-              overflow: "hidden",
-            }}
-            textStyle={{
-              fontSize: 14,
-              fontFamily: "Poppins-Bold",
-              fontWeight: "bold",
-            }}
+            style={styles.circlestyle}
+            textStyle={styles.textStyle}
           />
         </View>
-        <Text style={{ fontSize: 10 }}>{"Day      1"}</Text>
-        <Text style={{ fontSize: 10 }}>{"Count   50times"}</Text>
+        <Text style={styles.cirText}>{"Day      1"}</Text>
+        <Text style={styles.cirText}>{"Count   50times"}</Text>
         <View
           style={{
             flexDirection: "row",
@@ -122,21 +116,13 @@ export default function HomeScreen() {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontFamily: "Poppins-Regular" }}>{data.name}</Text>
+          <Text>{data.name}</Text>
           <View
-            style={{
-              backgroundColor: data.lightColor,
-              padding: 2,
-              borderRadius: 10,
-            }}
+            style={styles.circleView}
           >
             <Image
               source={next}
-              style={{
-                height: 12,
-                width: 12,
-                resizeMode: "contain",
-              }}
+              style={styles.circleNext}
             />
           </View>
         </View>
@@ -149,27 +135,24 @@ export default function HomeScreen() {
       <View style={{ borderRadius: 10, overflow: "hidden" }}>
         <ImageBackground
           source={video.image}
-          style={{
-            height: 150,
-            width: 300,
-          }}
+          style={styles.VideoImage}
         ></ImageBackground>
         <Text style={styles.videoText}>{video.title}</Text>
         <View style={styles.videoplay1}>
-          <Image source={star} style={{ height: 10, width: 10 }} />
+          <Image source={star} style={styles.videoImage} />
         </View>
       </View>
 
       <View style={styles.videoplay2}>
         <View style={styles.videoplay3}>
-          <Image source={play} style={{ height: 10, width: 10 }} />
+          <Image source={play} style={styles.videoImage} />
         </View>
-        <Text style={{ fontFamily: "Poppins-Regular" }}>
+        <Text>
           {video.description}
         </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontFamily: "Poppins-Regular", fontSize: 12 }}>
-            <Image source={book} style={{ height: 15, width: 15 }} />
+          <Text style={styles.cirText}>
+            <Image source={book} style={styles.bookStyle} />
             {"   "}
             {video.level}
           </Text>

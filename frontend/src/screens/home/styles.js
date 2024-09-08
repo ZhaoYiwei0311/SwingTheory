@@ -100,6 +100,44 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#8860a2",
   },
+  dataimage: { 
+    height: 25, 
+    width: 25 
+  },
+  circlestyle: {
+    elevation: 2,
+    overflow: "hidden",
+  },
+  textStyle: {
+    fontSize: 14,
+    fontFamily: "Poppins-Bold",
+    fontWeight: "bold",
+  },
+  cirText: {
+    fontSize: 10,
+  },
+  circleView: {
+    backgroundColor: data.lightColor,
+    padding: 2,
+    borderRadius: 10,
+  },
+  circleNext:{
+    height: 12,
+    width: 12,
+    resizeMode: "contain",
+  },
+  videoImage: { 
+    height: 10, 
+    width: 10 
+  },
+  VideoImage:{
+    height: 150,
+    width: 300,
+  },
+  bookStyle: { 
+    height: 15, 
+    width: 15 
+  },
   screen: {
     margin: "3%",
     flex: 1,
