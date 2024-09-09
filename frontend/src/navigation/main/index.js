@@ -5,6 +5,7 @@ import SavePostScreen from "../../screens/savePost";
 import WelcomeScreen from "../../screens/welcome";
 import LoginScreen from "../../screens/login";
 import CameraScreen from "../../screens/camera";
+import VideoPlayerScreen from "../../screens/video";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -29,6 +30,7 @@ export default function Route() {
       <Stack.Navigator initialRouteName="welcome">
         {currentUserObj.currentUser == null ? (
           <>
+
             <Stack.Screen
               name="welcome"
               component={WelcomeScreen}
@@ -57,6 +59,12 @@ export default function Route() {
               component={HomeScreen}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="Video Player"
+              component={VideoPlayerScreen}
+              options={{ headerShown: false }}
+            />
+            
             <Stack.Screen
               name="main"
               component={MailIcon}
