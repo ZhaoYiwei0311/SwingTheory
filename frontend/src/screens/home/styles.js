@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   circleView: {
-    backgroundColor: data.lightColor,
+    backgroundColor: theme.colors.primary,
     padding: 2,
     borderRadius: 10,
   },
