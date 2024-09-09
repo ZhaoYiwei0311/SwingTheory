@@ -101,6 +101,7 @@ export default function CameraScreen() {
     });
 
     if (videoPromise) {
+      console.log("Video recorded", videoPromise.uri);
       await saveVideoToLibrary(videoPromise.uri);
       const description = "Uploaded from camera recording";
       console.log("Video recorded", videoPromise.uri);
