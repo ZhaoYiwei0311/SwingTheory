@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, Image, ImageBackground, ScrollView } from "react-native";
+import {Video} from "react-native-video";
+import { View, Text, Image, ImageBackground, ScrollView,TouchableOpacity } from "react-native";
 import * as Progress from "react-native-progress";
 import styles from "./styles";
 import ScreenWrapper from "../../components/screenWrapper/screenWrapper";
@@ -39,35 +40,10 @@ export default function HomeScreen() {
     {
       name: "Serve",
       status: 90,
-
       image: serve,
       lightColor: theme.colors.lightpurple,
       color: theme.colors.purple,
       darkColor: theme.colors.darkpurple,
-    },
-  ];
-
-  const videoData = [
-    {
-      title: "Forehand Training",
-      description: "2 Hour Forehand Training",
-      duration: "45 Min",
-      level: "Beginner",
-      image: couple,
-    },
-    {
-      title: "Backhand Training",
-      description: "1.5 Hour Backhand Training",
-      duration: "40 Min",
-      level: "Intermediate",
-      image: backteach,
-    },
-    {
-      title: "Serve Training",
-      description: "1 Hour Serve Practice",
-      duration: "30 Min",
-      level: "Advanced",
-      image: serveteach,
     },
   ];
 
@@ -129,6 +105,31 @@ export default function HomeScreen() {
       </View>
     );
   };
+  const videoData = [
+    {
+      title: "Forehand Training",
+      description: "2 Hour Forehand Training",
+      duration: "45 Min",
+      level: "Beginner",
+      image: couple,
+    },
+    {
+      title: "Backhand Training",
+      description: "1.5 Hour Backhand Training",
+      duration: "40 Min",
+      level: "Intermediate",
+      image: backteach,
+    },
+    {
+      title: "Serve Training",
+      description: "1 Hour Serve Practice",
+      duration: "30 Min",
+      level: "Advanced",
+      image: serveteach,
+    },
+  ];
+
+
 
   const VideoPlay = ({ video }) => (
     <View style={styles.videoCard}>
@@ -161,7 +162,7 @@ export default function HomeScreen() {
       </View>
     </View>
   );
-
+  
   return (
     <>
       <ScreenWrapper bg="white">
@@ -205,3 +206,5 @@ export default function HomeScreen() {
     </>
   );
 }
+
+
