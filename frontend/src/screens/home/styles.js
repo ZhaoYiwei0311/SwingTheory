@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#8860a2",
   },
-  dataimage: { 
-    height: 25, 
-    width: 25 
+  dataimage: {
+    height: 25,
+    width: 25,
   },
   circlestyle: {
     elevation: 2,
@@ -117,26 +117,26 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   circleView: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: data.lightColor,
     padding: 2,
     borderRadius: 10,
   },
-  circleNext:{
+  circleNext: {
     height: 12,
     width: 12,
     resizeMode: "contain",
   },
-  videoImage: { 
-    height: 10, 
-    width: 10 
+  videoImage: {
+    height: 10,
+    width: 10,
   },
-  VideoImage:{
+  VideoImage: {
     height: 150,
     width: 300,
   },
-  bookStyle: { 
-    height: 15, 
-    width: 15 
+  bookStyle: {
+    height: 15,
+    width: 15,
   },
   screen: {
     margin: "3%",
