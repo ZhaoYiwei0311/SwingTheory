@@ -5,6 +5,8 @@ import { hp, wp } from "../../constants/common";
 export default StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: hp(3),
+    justifyContent: "space-between",
   },
   headerContainer: {
     marginHorizontal: wp(4),
@@ -37,23 +39,37 @@ export default StyleSheet.create({
     fontWeight: "500",
     color: theme.colors.textDark,
   },
+  profileContainer: {
+    gap: hp(0.8),
+    marginTop: hp(1),
+    marginHorizontal: wp(4),
+  },
   info: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
   },
+  infoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 5,
+  },
+  infoTitle: {
+    fontWeight: "500",
+    color: theme.colors.textDark,
+    fontSize: hp(2.0),
+  },
   infoText: {
-    fontSize: hp(1.6),
     fontWeight: "500",
     color: theme.colors.textLight,
+    fontSize: hp(2.0),
   },
-
   logoutButton: {
     position: "absolute",
-    right: 0,
-    padding: 5,
+    right: wp(1.5),
+    padding: 8,
     borderRadius: theme.radius.sm,
-    backgroundColor: "#fee2e2",
+    backgroundColor: theme.colors.roseLight,
   },
   listStyle: {
     paddingHorizontal: wp(4),

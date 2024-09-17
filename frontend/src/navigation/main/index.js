@@ -14,6 +14,8 @@ import { useEffect } from "react";
 import { userAuthStateListener } from "../../redux/actions/auth";
 import TestScreen from "../../screens/test";
 import { MailIcon } from "../../components/icons/icons";
+import ProfileScreen from "../../screens/profile";
+import EditProfileScreen from "../../screens/editProfile";
 
 const Stack = createStackNavigator();
 
@@ -30,7 +32,6 @@ export default function Route() {
       <Stack.Navigator initialRouteName="welcome">
         {currentUserObj.currentUser == null ? (
           <>
-
             <Stack.Screen
               name="welcome"
               component={WelcomeScreen}
@@ -60,11 +61,11 @@ export default function Route() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="Video Player"
+              name="videoPlayer"
               component={VideoPlayerScreen}
               options={{ headerShown: false }}
             />
-            
+
             <Stack.Screen
               name="main"
               component={MailIcon}
@@ -88,6 +89,16 @@ export default function Route() {
             <Stack.Screen
               name="signUp"
               component={SignUpScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="profile"
+              component={ProfileScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="editProfile"
+              component={EditProfileScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

@@ -6,35 +6,48 @@ import {
   Alert,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useCallback } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { hp, wp } from "../../constants/common";
-// import { useAuth } from "../../contexts/AuthContext";
 import { theme } from "../../constants/theme";
-import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
-// import { useRouter } from "expo-router";
-// import { getUserImageSrc } from "../../services/imageService";
-import { Image } from "expo-image";
-// import Header from "../../components/Header";
 import ScreenWrapper from "../../components/screenWrapper/screenWrapper";
-// import Icon from "../../assets/icons";
 import Avatar from "../../components/avartar/index";
-// import { supabase } from "../../lib/supabase";
+import Loading from "../../components/loading";
+import { Image } from "expo-image";
+import styles from "./styles";
+import {
+  EditIcon,
+  LogOutIcon,
+  MailIcon,
+  PhoneIcon,
+} from "../../components/icons/icons";
+import {} from "@react-navigation/native";
+import { getUserInfo } from "../../services/user";
+import Button from "../../components/button";
 // import { fetchPosts } from "../../services/postService";
 // import PostCard from "../../components/PostCard";
-import Loading from "../../components/loading";
-import styles from "./styles";
+// import { getUserImageSrc } from "../../services/imageService";
 
 var limit = 0;
 const ProfileScreen = () => {
-  // const { user, setAuth } = useAuth();
-  // const router = useRouter();
+  const [profileData, setProfileData] = useState(() => getUserInfo());
+  console.log("profileData: ", profileData);
+
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const navigation = useNavigation();
 
-  // first do this
+  useFocusEffect(
+    useCallback(() => {
+      console.log("ProfileScreen was focused");
+      (async () => {
+        const data = await getUserInfo();
+        setProfileData(data);
+      })();
+    }, [])
+  );
 
+  // first do this
   const getPosts = async () => {
     if (!hasMore) return null; // if no more posts then don't call the api
     limit = limit + 10; // get 10 more posts everytime
@@ -47,11 +60,7 @@ const ProfileScreen = () => {
   };
 
   const onLogout = async () => {
-    setAuth(null);
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      Alert.alert("Error Signing Out User", error.message);
-    }
+    navigation.navigate("welcome");
   };
 
   const handleLogout = () => {
@@ -76,8 +85,11 @@ const ProfileScreen = () => {
       <FlatList
         data={{ 1: 1 }}
         ListHeaderComponent={
-          // handleLogout={handleLogout}
-          <UserHeader user={user} navigation={navigation} />
+          <UserHeader
+            navigation={navigation}
+            handleLogout={handleLogout}
+            profileData={profileData}
+          />
         }
         ListHeaderComponentStyle={{ marginBottom: 30 }}
         showsVerticalScrollIndicator={false}
@@ -108,14 +120,12 @@ const ProfileScreen = () => {
   );
 };
 
-const UserHeader = ({ user, handleLogout, router }) => {
+const UserHeader = ({ handleLogout, navigation, profileData }) => {
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <View>
-        <Header title="Profile" mb={30} />
-        {/* onPress={handleLogout} */}
-        <TouchableOpacity style={styles.logoutButton}>
-          <Icon name="logout" size={26} color={theme.colors.rose} />
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <LogOutIcon name="logout" size={40} color={theme.colors.rose} />
         </TouchableOpacity>
       </View>
 
@@ -128,52 +138,97 @@ const UserHeader = ({ user, handleLogout, router }) => {
               size={hp(12)}
               rounded={theme.radius.xxl * 1.4}
             />
-            {/* <Image source={getUserImageSrc(user?.image)} style={styles.avatar} /> */}
+            <Image
+              // source={getUserImageSrc(user?.image)}
+              source={require("../../images/defaultUser.png")}
+              style={styles.avatar}
+            />
             <Pressable
               style={styles.editIcon}
-              onPress={() => navigation.push("home")}
+              onPress={() => navigation.navigate("editProfile")}
             >
-              <Icon name="edit" strokeWidth={2.5} size={20} />
+              <EditIcon name="edit" strokeWidth={2.5} size={20} />
             </Pressable>
           </View>
 
-          {/* username & address */}
           <View style={{ alignItems: "center", gap: 4 }}>
             <Text style={styles.userName}>
-              {/* {user && user.name} */}
-              {"username"}
+              {profileData.name ? profileData.name : "USER NAME"}
             </Text>
             <Text style={styles.infoText}>
-              {/* {user && user.address} */}
-              {"address"}
+              Last Login In:
+              {profileData.loginTime ? " " + profileData.loginTime : ""}
             </Text>
           </View>
 
-          {/* email, phone */}
-          <View style={{ gap: 10 }}>
+          <View style={styles.profileContainer}>
             <View style={styles.info}>
-              <Icon name="mail" size={20} color={theme.colors.textLight} />
-              <Text style={[styles.infoText, { fontSize: hp(1.8) }]}>
-                {/* {user && user.email} */}
-                {"email"}
-              </Text>
-            </View>
-            {user && user.phoneNumber && (
-              <View style={styles.info}>
-                <Icon name="call" size={20} color={theme.colors.textLight} />
-                <Text style={[styles.infoText, { fontSize: hp(1.8) }]}>
-                  {/* {user.phoneNumber} */}
-                  {"phone"}
+              <MailIcon name="mail" size={20} color={theme.colors.textLight} />
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoTitle}>Email:</Text>
+                <Text style={styles.infoText}>
+                  {profileData.email ? profileData.email : "To be added"}
                 </Text>
               </View>
-            )}
+            </View>
 
-            {/* {user && user.bio && ( */}
-            <Text style={[styles.infoText]}>
-              {/* {user.bio} */}
-              {"bio"}
-            </Text>
-            {/* )} */}
+            <View style={styles.info}>
+              <PhoneIcon
+                name="phoneNumber"
+                size={20}
+                color={theme.colors.textLight}
+              />
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoTitle}>Phone:</Text>
+                <Text style={styles.infoText}>
+                  {profileData.phoneNumber
+                    ? profileData.phoneNumber
+                    : "To be added"}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.info}>
+              <PhoneIcon
+                name="gender"
+                size={20}
+                color={theme.colors.textLight}
+              />
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoTitle}>Gender:</Text>
+                <Text style={styles.infoText}>
+                  {profileData.gender ? profileData.gender : "To be added"}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.info}>
+              <PhoneIcon
+                name="height"
+                size={20}
+                color={theme.colors.textLight}
+              />
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoTitle}>Height:</Text>
+                <Text style={styles.infoText}>
+                  {profileData.height ? profileData.height : "166"} cm
+                </Text>
+              </View>
+
+              <PhoneIcon
+                name="weight"
+                size={20}
+                color={theme.colors.textLight}
+              />
+
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoTitle}>Weight:</Text>
+                <Text style={styles.infoText}>
+                  {profileData.weight ? profileData.weight : "51"} kg
+                </Text>
+              </View>
+            </View>
+            {/* gap */}
           </View>
         </View>
       </View>

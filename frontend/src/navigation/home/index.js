@@ -4,6 +4,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { HomeIcon, AddIcon, UserIcon } from "../../components/icons/icons";
 import { theme } from "../../constants/theme";
 import HomeScreen from "../../screens/home";
+import ProfileScreen from "../../screens/profile";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -48,7 +49,7 @@ export default function MainScreen() {
 
       <Tab.Screen
         name="Me"
-        component={EmptyScreen}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ color }) => <UserIcon color={color} />,
         }}

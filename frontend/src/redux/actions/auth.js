@@ -96,4 +96,3 @@ export const getCurrentUserData = () => async (dispatch) => {
     }
   });
 };
-
