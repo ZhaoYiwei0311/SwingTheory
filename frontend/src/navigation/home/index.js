@@ -25,7 +25,7 @@ export default function MainScreen() {
       initialRouteName="main"
     >
       <Tab.Screen
-        name="home"
+        name="Home"
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color }) => <HomeIcon color={color} />,
