@@ -14,49 +14,57 @@ import * as ImagePicker from "expo-image-picker";
 import { theme } from "../../constants/theme";
 import { hp, wp } from "../../constants/common";
 import { useNavigation } from "@react-navigation/native";
-// import { updateUser } from "../../services/userService";
-// import {
-//   getFilePath,
-//   getUserImageSrc,
-//   uploadFile,
-// } from "../../services/imageService";
-
+import SelectDropdown from "react-native-select-dropdown";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Image } from "expo-image";
 import styles from "./styles";
 import {
   ArrowLeftIcon,
   CameraIcon,
-  LocationIcon,
-  MailIcon,
   PhoneIcon,
+  RulerIcon,
+  ScaleIcon,
   UserIcon,
 } from "../../components/icons/icons";
+import { createImage, getUserInfo, updateUserInfo } from "../../services/user";
 
 const EditProfileScreen = () => {
-  // const { user: currentUser, setUserData } = useAuth();
-  // const router = useRouter();
-  const [profileModal, toggleProfileModal] = useState(false);
+  const [currentUser, setUserData] = useState(null);
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     name: "",
     phoneNumber: "",
     image: null,
-    bio: "",
-    address: "",
+    gender: "",
+    height: "",
+    weight: "",
+    handPreference: "",
   });
-  const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     setUser({
-  //       name: currentUser.name || "",
-  //       phoneNumber: currentUser.phoneNumber || "",
-  //       image: currentUser.image || null,
-  //       address: currentUser.address || "",
-  //       bio: currentUser.bio || "",
-  //     });
-  //   }
-  // }, [currentUser]);
+  const genderList = [
+    { title: "Male" },
+    { title: "Female" },
+    { title: "Prefer not to say" },
+  ];
+
+  const handList = [{ title: "Left-handed" }, { title: "Right-handed" }];
+  useEffect(() => {
+    getUserInfo().then((user) => setUserData(user));
+  }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      setUser({
+        name: currentUser.name || "",
+        phoneNumber: currentUser.phoneNumber || "",
+        image: currentUser.image || null,
+        height: currentUser.height || "",
+        weight: currentUser.weight || "",
+        handPreference: currentUser.handPreference || "",
+      });
+    }
+  }, [currentUser]);
 
   const onPickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -73,33 +81,39 @@ const EditProfileScreen = () => {
 
   const onSubmit = async () => {
     let userData = { ...user };
-    let { name, phoneNumber, address, image, bio } = userData;
-    if (!name || !phoneNumber || !address || !image || !bio) {
+    let { name, phoneNumber, image, gender, height, weight, handPreference } =
+      userData;
+    if (
+      !name ||
+      !phoneNumber ||
+      !image ||
+      !gender ||
+      !height ||
+      !weight ||
+      !handPreference
+    ) {
       Alert.alert("Profile", "Please fill all the fields");
       return;
     }
 
     setLoading(true);
     if (typeof image == "object") {
-      let imageResult = await uploadFile("profiles", image?.uri, true);
-      if (imageResult.success) userData.image = imageResult.data;
+      let imageResult = await createImage(image.uri);
+      if (imageResult) userData.image = imageResult;
       else userData.image = null;
     }
 
-    const res = await updateUser(currentUser?.id, userData);
-    setLoading(false);
+    const res = await updateUserInfo(userData);
+    console.log(res);
     if (res.success) {
       setUserData({ ...currentUser, ...userData });
-      router.back();
+      navigation.goBack();
     }
-
-    // good to go
   };
 
-  let imageSource =
-    user.image && typeof user?.image == "object"
-      ? user.image.uri
-      : require("../../images/defaultUser.png");
+  let imageSource = user.image
+    ? user.image
+    : require("../../images/defaultUser.png");
 
   return (
     <ScreenWrapper bg="white">
@@ -141,27 +155,117 @@ const EditProfileScreen = () => {
               value={user.phoneNumber}
               onChangeText={(value) => setUser({ ...user, phoneNumber: value })}
             />
-            <Input
-              icon={<MailIcon name="location" size={26} />}
-              placeholder="gender selector"
-              placeholderTextColor={theme.colors.textLight}
-              value={user.address}
-              onChangeText={(value) => setUser({ ...user, address: value })}
-            />
+            {/* **********SELECT GENDER********** */}
+            <View style={styles.selectContainer}>
+              <SelectDropdown
+                data={genderList}
+                onSelect={(selectedItem, index) => {
+                  setUser({ ...user, gender: selectedItem.title });
+                }}
+                renderButton={(selectedItem, isOpened) => {
+                  return (
+                    <View style={styles.dropdownButtonStyle}>
+                      {selectedItem && (
+                        <Icon
+                          name={selectedItem.icon}
+                          style={styles.dropdownButtonIconStyle}
+                        />
+                      )}
+                      <Text style={styles.dropdownButtonTxtStyle}>
+                        {(selectedItem && selectedItem.title) ||
+                          "  Select Gender"}
+                      </Text>
+                      <Icon
+                        name={isOpened ? "chevron-up" : "chevron-down"}
+                        style={styles.dropdownButtonArrowStyle}
+                      />
+                    </View>
+                  );
+                }}
+                renderItem={(item, index, isSelected) => {
+                  return (
+                    <View
+                      style={{
+                        ...styles.dropdownItemStyle,
+                        ...(isSelected && { backgroundColor: "#D2D9DF" }),
+                      }}
+                    >
+                      <Icon
+                        name={item.icon}
+                        style={styles.dropdownItemIconStyle}
+                      />
+                      <Text style={styles.dropdownItemTxtStyle}>
+                        {item.title}
+                      </Text>
+                    </View>
+                  );
+                }}
+                showsVerticalScrollIndicator={false}
+                dropdownStyle={styles.dropdownMenuStyle}
+              />
+
+              <SelectDropdown
+                data={handList}
+                onSelect={(selectedItem, index) => {
+                  setUser({ ...user, handPreference: selectedItem.title });
+                }}
+                renderButton={(selectedItem, isOpened) => {
+                  return (
+                    <View style={styles.dropdownButtonStyle}>
+                      {selectedItem && (
+                        <Icon
+                          name={selectedItem.icon}
+                          style={styles.dropdownButtonIconStyle}
+                        />
+                      )}
+                      <Text style={styles.dropdownButtonTxtStyle}>
+                        {(selectedItem && selectedItem.title) ||
+                          "  Hand Preference"}
+                      </Text>
+                      <Icon
+                        name={isOpened ? "chevron-up" : "chevron-down"}
+                        style={styles.dropdownButtonArrowStyle}
+                      />
+                    </View>
+                  );
+                }}
+                renderItem={(item, index, isSelected) => {
+                  return (
+                    <View
+                      style={{
+                        ...styles.dropdownItemStyle,
+                        ...(isSelected && { backgroundColor: "#D2D9DF" }),
+                      }}
+                    >
+                      <Icon
+                        name={item.icon}
+                        style={styles.dropdownItemIconStyle}
+                      />
+                      <Text style={styles.dropdownItemTxtStyle}>
+                        {item.title}
+                      </Text>
+                    </View>
+                  );
+                }}
+                showsVerticalScrollIndicator={false}
+                dropdownStyle={styles.dropdownMenuStyle}
+              />
+            </View>
+            {/* **********ONE ROW OF SELECT********** */}
 
             <Input
-              icon={<MailIcon name="location" size={26} />}
-              placeholder="Enter your height"
+              icon={<RulerIcon name="height" />}
+              placeholder="Enter your height(cm)"
               placeholderTextColor={theme.colors.textLight}
-              onChangeText={(value) => setUser({ ...user, bio: value })}
-              value={user.bio}
+              onChangeText={(value) => setUser({ ...user, height: value })}
+              value={user.height}
             />
             <Input
-              icon={<MailIcon name="location" size={26} />}
-              placeholder="Enter your weight"
+              icon={<ScaleIcon name="weight" />}
+              placeholder="Enter your weight(kg)"
               placeholderTextColor={theme.colors.textLight}
-              onChangeText={(value) => setUser({ ...user, bio: value })}
-              value={user.bio}
+              onChangeText={(value) => setUser({ ...user, weight: value })}
+              value={user.weight}
             />
 
             {/* button */}

@@ -13,8 +13,7 @@ const Avatar = ({
 }) => {
   return (
     <Image
-      // source={getUserImageSrc(uri)}
-      source={require("../../images/defaultUser.png")}
+      source={uri ? uri : require("../../images/defaultUser.png")}
       transition={100}
       style={[
         styles.avatar,

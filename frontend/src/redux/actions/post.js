@@ -45,6 +45,7 @@ export const createPost = (description, video) => async (dispatch) =>
       await importAuthFunctions();
       await importFirestoreFunctions();
     }
+
     let storagePostId = uuid();
     storageRef = ref(storage, `posts/${auth.currentUser.uid}/${storagePostId}`);
     const metadata = {
@@ -72,35 +73,22 @@ export const createPost = (description, video) => async (dispatch) =>
               async (downloadURL) => {
                 console.log("File available at", downloadURL);
 
-                try {
-                  // Get the metadata
-                  const metadata = await getMetadata(storageRef);
-                  const videoSize = metadata.size;
-                  const timeCreated = metadata.timeCreated;
-                  const updatedTime = metadata.updated;
+                let postData = {
+                  user_id: auth.currentUser.uid,
+                  video_id: storagePostId,
+                  url: downloadURL,
+                  title: description,
+                };
+                console.log("Post data created", postData);
 
-                  // Prepare the post data
-                  let postData = {
-                    creator: auth.currentUser.uid,
-                    media: downloadURL,
-                    description,
-                    timestamp: Timestamp.now(),
-                    videoSize,
-                    timeCreated,
-                    updatedTime,
-                  };
+                await setDoc(
+                  doc(firestore, "raw-video", storagePostId),
+                  postData
+                );
 
-                  // Use postData
-                  await setDoc(
-                    doc(firestore, "raw-video", storagePostId),
-                    postData
-                  );
+                // TODO: Uncomment this line to send the post data to the backend
+                // await sendPostData(postData, reject);
 
-                  // TODO: Uncomment this line to send the post data to the backend
-                  // await sendPostData(postData, reject);
-                } catch (error) {
-                  console.error("Error getting file metadata:", error);
-                }
                 resolve();
               }
             );
@@ -134,3 +122,25 @@ async function sendPostData(postData, reject) {
     reject();
   }
 }
+
+const getPostsByUser =
+  (uid = firebase.auth().currentUser.uid) =>
+  (dispatch) =>
+    new Promise((resolve, reject) => {
+      firebase
+        .firestore()
+        .collection("post")
+        .where("creator", "==", uid)
+        .orderBy("creation", "desc")
+        .onSnapshot((snapshot) => {
+          let posts = snapshot.docs.map((doc) => {
+            const data = doc.data();
+            const id = doc.id;
+            return { id, ...data };
+          });
+          dispatch({
+            type: CURRENT_USER_POSTS_UPDATE,
+            currentUserPosts: posts,
+          });
+        });
+    });

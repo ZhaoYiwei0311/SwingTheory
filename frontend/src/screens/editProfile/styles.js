@@ -47,17 +47,62 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     gap: 15,
   },
-  bio: {
-    flexDirection: "row",
-    height: hp(15),
-    alignItems: "flex-start",
-    paddingVertical: 15,
-  },
   backButton: {
     alignSelf: "flex-start",
     padding: 5,
     borderRadius: theme.radius.sm,
     backgroundColor: "rgba(0,0,0,0.07)",
+  },
+  dropdownButtonStyle: {
+    width: wp(44),
+    height: hp(6.6),
+    backgroundColor: "#FFF",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    borderWidth: 0.4,
+    borderColor: theme.colors.text,
+    borderRadius: theme.radius.xl,
+  },
+  dropdownButtonTxtStyle: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: "500",
+    color: theme.colors.text,
+  },
+  dropdownButtonArrowStyle: {
+    fontSize: 28,
+  },
+  dropdownButtonIconStyle: {
+    fontSize: 28,
+    marginRight: 8,
+  },
+  dropdownMenuStyle: {
+    backgroundColor: "#E9ECEF",
+    borderRadius: 8,
+  },
+  dropdownItemStyle: {
+    width: "100%",
+    flexDirection: "row",
+    paddingHorizontal: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  dropdownItemTxtStyle: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "500",
+    color: theme.colors.text,
+  },
+  dropdownItemIconStyle: {
+    fontSize: 28,
+    marginRight: 8,
+  },
+  selectContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

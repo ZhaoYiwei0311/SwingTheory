@@ -32,7 +32,6 @@ var limit = 0;
 const ProfileScreen = () => {
   const [profileData, setProfileData] = useState(() => getUserInfo());
   console.log("profileData: ", profileData);
-
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const navigation = useNavigation();
@@ -134,13 +133,20 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
           {/* avatar */}
           <View style={styles.avatarContainer}>
             <Avatar
-              uri={"../../images/defaultUser.png"}
+              uri={
+                profileData.image
+                  ? profileData.image
+                  : require("../../images/defaultUser.png")
+              }
               size={hp(12)}
               rounded={theme.radius.xxl * 1.4}
             />
             <Image
-              // source={getUserImageSrc(user?.image)}
-              source={require("../../images/defaultUser.png")}
+              source={
+                profileData.image
+                  ? profileData.image
+                  : require("../../images/defaultUser.png")
+              }
               style={styles.avatar}
             />
             <Pressable
