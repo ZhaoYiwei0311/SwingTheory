@@ -10,17 +10,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
     marginHorizontal: wp(4),
   },
   text: {
-    fontSize: hp(2.7),
+    fontSize: hp(2.8),
+    marginHorizontal: hp(0.5),
     fontWeight: theme.fonts.bold,
     color: theme.colors.primary,
   },
   banner: {
-    marginTop: "5%",
-    padding: 30,
+    marginTop: hp(1),
+    padding: 25,
     resizeMode: "contain",
     borderRadius: 20,
     overflow: "hidden",
@@ -47,30 +47,32 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   activitiesContainer: {
-    marginBottom: 0,
+    marginTop: hp(1),
+    marginBottom: hp(1),
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
   activitiesTitle1: {
-    fontSize: hp(2.7),
-    fontFamily: "Poppins-Medium",
+    fontSize: hp(2.6),
     fontWeight: theme.fonts.bold,
     color: theme.colors.textDark,
   },
   videoCard: {
     borderRadius: 15,
     marginHorizontal: 12,
-    shadowOffset: { width: -5, height: 3 },
+    shadowOffset: { width: -3, height: 3 },
     shadowColor: "grey",
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
     backgroundColor: "#fff",
+    height: hp(28),
   },
   videoText: {
     position: "absolute",
+    fontSize: hp(2),
+    fontWeight: theme.fonts.semibold,
     bottom: 5,
     left: 10,
-    fontFamily: "Poppins-Regular",
     color: "#fff",
   },
   videoplay1: {
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
   },
   videoplay3: {
     position: "absolute",
-    backgroundColor: "#8860a2",
+    backgroundColor: theme.colors.primary,
     padding: 10,
     right: 25,
     top: -15,
@@ -97,8 +99,8 @@ const styles = StyleSheet.create({
   },
   videotext: {
     fontFamily: "Poppins-Regular",
-    fontSize: 12,
-    color: "#8860a2",
+    fontSize: hp(1.8),
+    color: theme.colors.primary,
   },
   dataimage: {
     height: 25,
@@ -109,12 +111,20 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   textStyle: {
-    fontSize: 14,
+    fontSize: hp(2),
     fontFamily: "Poppins-Bold",
     fontWeight: "bold",
   },
   cirText: {
-    fontSize: 10,
+    marginTop: hp(1.5),
+    fontSize: hp(2),
+    fontWeight: "bold",
+    color: theme.colors.primaryDark,
+  },
+  circleText: {
+    fontSize: hp(1.6),
+    fontWeight: theme.fonts.semibold,
+    color: theme.colors.primaryDark2,
   },
   circleView: {
     backgroundColor: theme.colors.primary,
@@ -134,12 +144,14 @@ const styles = StyleSheet.create({
     height: 150,
     width: 300,
   },
-  bookStyle: {
-    height: 15,
-    width: 15,
+  videoTitle: {
+    fontSize: hp(1.8),
+    fontWeight: theme.fonts.semibold,
+    color: theme.colors.textDark,
   },
+
   screen: {
-    margin: "3%",
+    margin: "4%",
     flex: 1,
   },
 });

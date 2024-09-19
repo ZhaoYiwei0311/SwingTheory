@@ -1,13 +1,6 @@
 import React, { useRef, useState } from "react";
 import Feather from "react-native-vector-icons/Feather";
-import {
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  Image,
-  Pressable,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, Pressable } from "react-native";
 import {
   CameraView,
   useCameraPermissions,
@@ -23,6 +16,7 @@ import { createPost } from "../../redux/actions";
 import CircularProgress from "react-native-circular-progress-indicator";
 import CountdownBar from "react-native-countdown-bar";
 import { GalleryIcon, ArrowLeftIcon } from "../../components/icons/icons";
+import Button from "../../components/button";
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState("back");

@@ -33,6 +33,7 @@ const ProfileScreen = () => {
   const [user, setUser] = useState(() => getUserInfo());
   const [posts, setPosts] = useState([]);
   const navigation = useNavigation();
+  const [hasMore, setHasMore] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
@@ -44,13 +45,22 @@ const ProfileScreen = () => {
   );
 
   useEffect(() => {
-    getPosts();
+    const focusListener = navigation.addListener("focus", () => {
+      getPosts();
+    });
+
+    return () => {
+      if (focusListener) {
+        focusListener();
+      }
+    };
   }, []);
 
   const getPosts = async () => {
     let res = await fetchCurrentPost();
     if (res.success) {
       setPosts(res.data);
+      setHasMore(false);
     } else {
       console.error("Failed to fetch posts: ", res.error);
     }

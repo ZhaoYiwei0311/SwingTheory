@@ -10,11 +10,13 @@ import { useNavigation } from "@react-navigation/native";
 import { AddIcon } from "../../components/icons/icons";
 import { getUserInfo } from "../../services/user";
 import { fetchCurrentPost } from "../../services/historyPost";
+import Loading from "../../components/loading";
 
 const HistoryScreen = () => {
   const [user, setUser] = useState(() => getUserInfo());
   const navigation = useNavigation();
   const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(
     useCallback(() => {
@@ -26,13 +28,22 @@ const HistoryScreen = () => {
   );
 
   useEffect(() => {
-    getPosts();
+    const focusListener = navigation.addListener("focus", () => {
+      getPosts();
+    });
+
+    return () => {
+      if (focusListener) {
+        focusListener();
+      }
+    };
   }, []);
 
   const getPosts = async () => {
     let res = await fetchCurrentPost();
     if (res.success) {
       setPosts(res.data);
+      setHasMore(false);
     } else {
       console.error("Failed to fetch posts: ", res.error);
     }
@@ -85,9 +96,15 @@ const HistoryScreen = () => {
           }}
           onEndReachedThreshold={0}
           ListFooterComponent={
-            <View style={{ marginVertical: 30 }}>
-              <Text style={styles.noPosts}>No more posts</Text>
-            </View>
+            hasMore ? (
+              <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
+                <Loading />
+              </View>
+            ) : (
+              <View style={{ marginVertical: 30 }}>
+                <Text style={styles.noPosts}>No more posts</Text>
+              </View>
+            )
           }
         />
       </View>

@@ -6,7 +6,7 @@ import RenderHtml from "react-native-render-html";
 import { Video } from "expo-av";
 import Avatar from "../avartar/index";
 import { styles, tagsStyles, shadowStyles } from "./styles";
-import { EditIcon } from "../icons/icons";
+import { EditIcon, ThreeDotIcon, TrashIcon } from "../icons/icons";
 
 const HistoryCard = ({
   item,
@@ -18,7 +18,6 @@ const HistoryCard = ({
   onDelete = () => {},
   onEdit = () => {},
 }) => {
-  const createdAt = item.create_at ? item.create_at : "18/09/2024 7:00 PM";
   const htmlBody = { html: item?.body };
 
   const handlePostDelete = () => {
@@ -54,16 +53,18 @@ const HistoryCard = ({
           />
           <View style={{ gap: 2 }}>
             <Text style={styles.username}>
-              {user.name ? user.name : "NAME"}
+              {user.name ? user.name : "Default Name"}
             </Text>
-            <Text style={styles.postTime}>{createdAt}</Text>
+            <Text style={styles.postTime}>
+              {item.create_at ? item.create_at : "18/09/2024 7:00 PM"}
+            </Text>
           </View>
         </View>
 
         {/* actions */}
         {showMoreIcon && (
           <TouchableOpacity onPress={openPostDetails}>
-            <EditIcon
+            <ThreeDotIcon
               name="threeDotsHorizontal"
               size={hp(3.4)}
               strokeWidth={3}
@@ -77,7 +78,7 @@ const HistoryCard = ({
               <EditIcon name="edit" size={hp(2.5)} color={theme.colors.text} />
             </TouchableOpacity>
             <TouchableOpacity onPress={handlePostDelete}>
-              <EditIcon
+              <TrashIcon
                 name="delete"
                 size={hp(2.5)}
                 color={theme.colors.rose}
