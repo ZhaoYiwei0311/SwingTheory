@@ -40,25 +40,22 @@ const HomeScreen = () => {
       name: "Forehand",
       status: 24,
       image: forehand,
-      lightColor: theme.colors.lightyellow,
-      color: theme.colors.yellow,
-      darkColor: theme.colors.darkyellow,
+      color: theme.colors.lightYellow,
+      darkColor: theme.colors.darkYellow,
     },
     {
       name: "Backhand",
       status: 50,
       image: backhand,
-      lightColor: theme.colors.lightgreen,
-      color: theme.colors.lightgreen,
-      darkColor: theme.colors.darkgreen,
+      color: theme.colors.lightGreen,
+      darkColor: theme.colors.darkGreen,
     },
     {
       name: "Serve",
-      status: 90,
+      status: 88,
       image: serve,
-      lightColor: theme.colors.lightPurple,
-      color: theme.colors.purple,
-      darkColor: theme.colors.darkpurple,
+      color: theme.colors.lightBlue,
+      darkColor: theme.colors.darkBlue,
     },
   ];
 
@@ -67,7 +64,7 @@ const HomeScreen = () => {
       <View
         style={{
           flex: 1,
-          height: index === 1 ? hp(18) : hp(14),
+          height: index === 1 ? hp(18) : hp(16),
           padding: 6,
           alignSelf: "center",
           backgroundColor: data.color,

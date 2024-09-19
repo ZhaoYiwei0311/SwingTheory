@@ -1,4 +1,7 @@
 export const theme = {
+  // #219EBC	#1E8EA9	#1A7E96	176F84	#145F71	114F5E	#0D3F4B	0A2F38	072026	031013	000000
+  // #219EBC	#37A8C3	4DB1C9	#64BBD0	#7AC5D7	#90CFDE	#A6D8E4	BCE2EB	#D3ECF2	#E9F5F8	FFFFFF
+
   colors: {
     primaryLight: "#D4E7B5",
     primaryTint: "#A7C957",
@@ -19,15 +22,12 @@ export const theme = {
     rose3: "#D07E80",
     roseLight: "#F2DADB",
     roseLight2: "#EBC8C8",
-    lightyellow: "#f8e4d9",
-    yellow: "#F2E8CF",
-    darkyellow: "#fac5a4",
-    lightgreen: "#D4E7B5",
-    lightgreen: "#D4E7B5",
-    darkgreen: "#386641",
-    lightPurple: "#dad5f7",
-    purple: "#e8f7fc",
-    darkPurple: "#8860a2",
+    lightYellow: "#F2E8CF",
+    darkYellow: "#e6bf4d",
+    lightGreen: "#D4E7B5",
+    darkGreen: "#386641",
+    lightBlue: "#D3ECF2",
+    darkBlue: "#219EBC",
   },
   fonts: {
     medium: "500",
