@@ -11,7 +11,6 @@ const importFirestoreFunctions = async () => {
   firestore = getFirestore();
   doc = firestoreModule.doc;
   setDoc = firestoreModule.setDoc;
-  getDoc = firestoreModule.getDoc;
   updateDoc = firestoreModule.updateDoc;
 };
 
@@ -46,7 +45,6 @@ export const getUserInfo = async () => {
     const docRef = doc(firestore, "user", user.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
       const loginTime = docSnap.data().metadata.lastSignInTime;
       let loginDate = new Date(loginTime);
       let formattedLoginDate = new Intl.DateTimeFormat("default", {
@@ -128,7 +126,6 @@ export const createImage = (image) =>
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then(
               async (downloadURL) => {
-                console.log("Avartar available at", downloadURL);
                 resolve(downloadURL);
               }
             );

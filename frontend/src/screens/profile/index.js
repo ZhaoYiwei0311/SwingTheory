@@ -6,55 +6,53 @@ import {
   Alert,
   FlatList,
 } from "react-native";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { hp, wp } from "../../constants/common";
+import { hp } from "../../constants/common";
 import { theme } from "../../constants/theme";
 import ScreenWrapper from "../../components/screenWrapper/screenWrapper";
 import Avatar from "../../components/avartar/index";
-import Loading from "../../components/loading";
+import Loading from "../../components/loading/index";
 import { Image } from "expo-image";
 import styles from "./styles";
 import {
   EditIcon,
+  HandIcon,
   LogOutIcon,
   MailIcon,
   PhoneIcon,
+  RulerIcon,
+  ScaleIcon,
+  UserIcon,
 } from "../../components/icons/icons";
-import {} from "@react-navigation/native";
 import { getUserInfo } from "../../services/user";
-import Button from "../../components/button";
-// import { fetchPosts } from "../../services/postService";
-// import PostCard from "../../components/PostCard";
-// import { getUserImageSrc } from "../../services/imageService";
+import { fetchCurrentPost } from "../../services/historyPost";
+import HistoryCard from "../../components/historyCard";
 
-var limit = 0;
 const ProfileScreen = () => {
-  const [profileData, setProfileData] = useState(() => getUserInfo());
-  console.log("profileData: ", profileData);
+  const [user, setUser] = useState(() => getUserInfo());
   const [posts, setPosts] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
   const navigation = useNavigation();
 
   useFocusEffect(
     useCallback(() => {
-      console.log("ProfileScreen was focused");
       (async () => {
         const data = await getUserInfo();
-        setProfileData(data);
+        setUser(data);
       })();
     }, [])
   );
 
-  // first do this
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   const getPosts = async () => {
-    if (!hasMore) return null; // if no more posts then don't call the api
-    limit = limit + 10; // get 10 more posts everytime
-    console.log("fetching posts: ", limit);
-    let res = await fetchPosts(limit, user.id);
+    let res = await fetchCurrentPost();
     if (res.success) {
-      if (posts.length == res.data.length) setHasMore(false);
       setPosts(res.data);
+    } else {
+      console.error("Failed to fetch posts: ", res.error);
     }
   };
 
@@ -82,46 +80,38 @@ const ProfileScreen = () => {
       {/* first create UserHeader and use it here, then move it to header comp when implementing user posts */}
       {/* posts */}
       <FlatList
-        data={{ 1: 1 }}
+        data={posts}
+        showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <UserHeader
             navigation={navigation}
             handleLogout={handleLogout}
-            profileData={profileData}
+            user={user}
           />
         }
-        ListHeaderComponentStyle={{ marginBottom: 30 }}
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listStyle}
         keyExtractor={(item, index) => item.id.toString()}
         renderItem={({ item }) => (
-          // currentUser={user}
-          <PostCard item={item} navigation={navigation} />
+          <HistoryCard item={item} user={user} navigation={navigation} />
         )}
         onEndReached={() => {
-          // getPosts();
+          getPosts();
           console.log("got to the end");
         }}
-        onEndReachedThreshold={0} //  Specifies how close to the bottom the user must scroll before endreached is triggers, 0 -> 1
+        onEndReachedThreshold={0}
         ListFooterComponent={
-          hasMore ? (
-            <View style={{ marginTop: posts.length == 0 ? 100 : 30 }}>
-              <Loading />
-            </View>
-          ) : (
-            <View style={{ marginVertical: 30 }}>
-              <Text style={styles.noPosts}>No more posts</Text>
-            </View>
-          )
+          <View style={{ marginVertical: 30 }}>
+            <Text style={styles.noPosts}>No more posts</Text>
+          </View>
         }
       />
     </ScreenWrapper>
   );
 };
 
-const UserHeader = ({ handleLogout, navigation, profileData }) => {
+const UserHeader = ({ handleLogout, navigation, user }) => {
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
+    <View style={styles.headerOuterContainer}>
       <View>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <LogOutIcon name="logout" size={40} color={theme.colors.rose} />
@@ -134,8 +124,8 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
           <View style={styles.avatarContainer}>
             <Avatar
               uri={
-                profileData.image
-                  ? profileData.image
+                user.image
+                  ? user.image
                   : require("../../images/defaultUser.png")
               }
               size={hp(12)}
@@ -143,8 +133,8 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
             />
             <Image
               source={
-                profileData.image
-                  ? profileData.image
+                user.image
+                  ? user.image
                   : require("../../images/defaultUser.png")
               }
               style={styles.avatar}
@@ -153,17 +143,17 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
               style={styles.editIcon}
               onPress={() => navigation.navigate("editProfile")}
             >
-              <EditIcon name="edit" strokeWidth={2.5} size={20} />
+              <EditIcon name="edit" />
             </Pressable>
           </View>
 
           <View style={{ alignItems: "center", gap: 4 }}>
             <Text style={styles.userName}>
-              {profileData.name ? profileData.name : "USER NAME"}
+              {user.name ? user.name : "USER NAME"}
             </Text>
             <Text style={styles.infoText}>
               Last Login In:
-              {profileData.loginTime ? " " + profileData.loginTime : ""}
+              {user.loginTime ? " " + user.loginTime : ""}
             </Text>
           </View>
 
@@ -173,7 +163,7 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
               <View style={styles.infoContainer}>
                 <Text style={styles.infoTitle}>Email:</Text>
                 <Text style={styles.infoText}>
-                  {profileData.email ? profileData.email : "To be added"}
+                  {user.email ? user.email : "To be added"}
                 </Text>
               </View>
             </View>
@@ -187,15 +177,13 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
               <View style={styles.infoContainer}>
                 <Text style={styles.infoTitle}>Phone:</Text>
                 <Text style={styles.infoText}>
-                  {profileData.phoneNumber
-                    ? profileData.phoneNumber
-                    : "To be added"}
+                  {user.phoneNumber ? user.phoneNumber : "To be added"}
                 </Text>
               </View>
             </View>
 
             <View style={styles.info}>
-              <PhoneIcon
+              <UserIcon
                 name="gender"
                 size={20}
                 color={theme.colors.textLight}
@@ -203,13 +191,23 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
               <View style={styles.infoContainer}>
                 <Text style={styles.infoTitle}>Gender:</Text>
                 <Text style={styles.infoText}>
-                  {profileData.gender ? profileData.gender : "To be added"}
+                  {user.gender ? user.gender : "To be added"}
                 </Text>
               </View>
             </View>
 
             <View style={styles.info}>
-              <PhoneIcon
+              <HandIcon name="hand" size={20} color={theme.colors.textLight} />
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoTitle}>Hand Preference:</Text>
+                <Text style={styles.infoText}>
+                  {user.gender ? user.handPreference : "To be added"}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.info}>
+              <RulerIcon
                 name="height"
                 size={20}
                 color={theme.colors.textLight}
@@ -217,11 +215,11 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
               <View style={styles.infoContainer}>
                 <Text style={styles.infoTitle}>Height:</Text>
                 <Text style={styles.infoText}>
-                  {profileData.height ? profileData.height : "166"} cm
+                  {user.height ? user.height : "166"} cm
                 </Text>
               </View>
 
-              <PhoneIcon
+              <ScaleIcon
                 name="weight"
                 size={20}
                 color={theme.colors.textLight}
@@ -230,7 +228,7 @@ const UserHeader = ({ handleLogout, navigation, profileData }) => {
               <View style={styles.infoContainer}>
                 <Text style={styles.infoTitle}>Weight:</Text>
                 <Text style={styles.infoText}>
-                  {profileData.weight ? profileData.weight : "51"} kg
+                  {user.weight ? user.weight : "51"} kg
                 </Text>
               </View>
             </View>

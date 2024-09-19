@@ -16,6 +16,7 @@ import TestScreen from "../../screens/test";
 import { MailIcon } from "../../components/icons/icons";
 import ProfileScreen from "../../screens/profile";
 import EditProfileScreen from "../../screens/editProfile";
+import HistoryScreen from "../../screens/history/index";
 
 const Stack = createStackNavigator();
 
@@ -99,6 +100,11 @@ export default function Route() {
             <Stack.Screen
               name="editProfile"
               component={EditProfileScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="history"
+              component={HistoryScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

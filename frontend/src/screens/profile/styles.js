@@ -8,6 +8,11 @@ export default StyleSheet.create({
     marginTop: hp(3),
     justifyContent: "space-between",
   },
+  headerOuterContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    marginBottom: hp(2),
+  },
   headerContainer: {
     marginHorizontal: wp(4),
     marginBottom: 20,

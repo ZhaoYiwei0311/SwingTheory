@@ -1,10 +1,16 @@
 import React from "react";
 import { View } from "react-native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { HomeIcon, AddIcon, UserIcon } from "../../components/icons/icons";
+import {
+  HomeIcon,
+  AddIcon,
+  UserIcon,
+  TennisIcon,
+} from "../../components/icons/icons";
 import { theme } from "../../constants/theme";
 import HomeScreen from "../../screens/home";
 import ProfileScreen from "../../screens/profile";
+import HistoryScreen from "../../screens/history";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -44,6 +50,14 @@ export default function MainScreen() {
         })}
         options={{
           tabBarIcon: ({ color }) => <AddIcon color={color} />,
+        }}
+      />
+
+      <Tab.Screen
+        name="History"
+        component={HistoryScreen}
+        options={{
+          tabBarIcon: ({ color }) => <TennisIcon color={color} />,
         }}
       />
 

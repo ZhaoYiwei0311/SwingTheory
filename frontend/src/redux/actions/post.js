@@ -73,11 +73,24 @@ export const createPost = (description, video) => async (dispatch) =>
               async (downloadURL) => {
                 console.log("File available at", downloadURL);
 
+                const date = Timestamp.now().toDate();
+                const options = {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                };
+                const formattedDate = date.toLocaleDateString(
+                  undefined,
+                  options
+                );
                 let postData = {
                   user_id: auth.currentUser.uid,
                   video_id: storagePostId,
                   url: downloadURL,
                   title: description,
+                  create_at: formattedDate,
                 };
                 console.log("Post data created", postData);
 
@@ -118,29 +131,6 @@ async function sendPostData(postData, reject) {
   console.log("POST request finished.");
   if (!response.ok) {
     console.error("POST request failed.", response.status);
-
     reject();
   }
 }
-
-const getPostsByUser =
-  (uid = firebase.auth().currentUser.uid) =>
-  (dispatch) =>
-    new Promise((resolve, reject) => {
-      firebase
-        .firestore()
-        .collection("post")
-        .where("creator", "==", uid)
-        .orderBy("creation", "desc")
-        .onSnapshot((snapshot) => {
-          let posts = snapshot.docs.map((doc) => {
-            const data = doc.data();
-            const id = doc.id;
-            return { id, ...data };
-          });
-          dispatch({
-            type: CURRENT_USER_POSTS_UPDATE,
-            currentUserPosts: posts,
-          });
-        });
-    });
